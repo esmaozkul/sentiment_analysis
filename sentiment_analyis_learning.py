@@ -8,8 +8,8 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 
 # Veri yolları
-train_dir = r"C:/Users/Esma/Desktop/dersler/sentiment_analysis/fer_2013/train"
-test_dir = r"C:/Users/Esma/Desktop/dersler/sentiment_analysis/fer_2013/test"
+train_dir = r"C:/Users/Esma/Desktop/dersler/sentiment_analysis/sentiment_analysis/fer_2013/train"
+test_dir = r"C:/Users/Esma/Desktop/dersler/sentiment_analysis/sentiment_analysis/fer_2013/test"
 
 # Duygu sınıfları
 emotion_dict = {0: "angry", 1: "disgust", 2: "fear", 3: "happy", 4: "neutral", 5: "sad", 6: "surprise"}
@@ -84,21 +84,11 @@ emotion_model.fit(
     validation_split=0.2,  # Eğitim verisinin %20'sini doğrulama için ayırırız.
     shuffle=True,
 )
+emotion_model.save("emotion_model.keras")  # Tüm modeli kaydeder
+print("Tüm model .keras formatında kaydedildi.")
 
-# Modeli JSON dosyasına kaydetme
-model_json = emotion_model.to_json()
-with open("emotion_model.json", "w") as json_file:
-    json_file.write(model_json)
-print("Model yapısı JSON dosyasına kaydedildi.")
+# Eğitilmiş model ağırlıklarını kaydetme
+emotion_model.save_weights("emotion_model.weights.h5")  # Doğru format
+print("Model ağırlıkları .weights.h5 formatında kaydedildi.")
 
-# Eğitilmiş model ağırlıklarını .h5 dosyasına kaydetme
-emotion_model.save_weights("emotion_model.h5")
-print("Model ağırlıkları .h5 formatında kaydedildi.")
 
-# Opsiyonel: Tüm modeli kaydetme
-emotion_model.save("emotion_model_full.h5")
-print("Tüm model .h5 formatında kaydedildi.")
-
-# Modeli test etme
-test_loss, test_accuracy = emotion_model.evaluate(x_test, y_test)
-print(f"Test Accuracy: {test_accuracy:.2f}, Test Loss: {test_loss:.2f}")
